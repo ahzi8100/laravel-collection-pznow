@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Data\Person;
 use Tests\TestCase;
 use function PHPUnit\Framework\assertEquals;
 use function PHPUnit\Framework\assertEqualsCanonicalizing;
@@ -31,5 +32,22 @@ class CollectionTest extends TestCase
         $result = $collection->pop();
         assertEquals(3, $result);
         assertEqualsCanonicalizing([1,2], $collection->all());
+    }
+
+    public function testMap()
+    {
+        $collection = collect([1,2,3]);
+        $result = $collection->map(function ($item){
+            return $item * 2;
+        });
+
+        assertEquals([2,4,6], $result->all());
+    }
+
+    public function testMapInto()
+    {
+        $collection = collect(["Ahzi"]);
+        $result = $collection->mapInto(Person::class);
+        assertEquals([new Person("Ahzi")], $result->all());
     }
 }
