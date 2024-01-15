@@ -6,6 +6,7 @@ use App\Data\Person;
 use Tests\TestCase;
 use function PHPUnit\Framework\assertEquals;
 use function PHPUnit\Framework\assertEqualsCanonicalizing;
+use function PHPUnit\Framework\assertTrue;
 
 class CollectionTest extends TestCase
 {
@@ -190,5 +191,29 @@ class CollectionTest extends TestCase
         });
 
         assertEqualsCanonicalizing([2,4,6,8,10], $result->all());
+    }
+
+    public function testPartitioning()
+    {
+        $collection = collect([
+            "Ahzi" => 100,
+            "Budi" => 80,
+            "Joko" => 90
+        ]);
+        [$result1, $result2] = $collection->partition(function ($item, $key){
+            return $item >= 90;
+        });
+
+        self::assertEquals(["Ahzi" => 100, "Joko" => 90], $result1->all());
+        self::assertEquals(["Budi" => 80], $result2->all());
+    }
+
+    public function testTesting()
+    {
+        $collection = collect(["Ahmad", "Fauzi", "Ahzi"]);
+        assertTrue($collection->contains("Ahzi"));
+        assertTrue($collection->contains(function ($value, $key){
+            return $value = "Ahmad";
+        }));
     }
 }
