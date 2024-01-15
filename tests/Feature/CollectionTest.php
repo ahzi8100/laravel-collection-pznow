@@ -3,6 +3,8 @@
 namespace Tests\Feature;
 
 use App\Data\Person;
+use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
+use Illuminate\Support\LazyCollection;
 use Tests\TestCase;
 use function PHPUnit\Framework\assertEquals;
 use function PHPUnit\Framework\assertEqualsCanonicalizing;
@@ -408,5 +410,19 @@ class CollectionTest extends TestCase
             return $carry + $item;
         });
         assertEquals(45,$result);
+    }
+
+    public function testLazyCollection()
+    {
+        $collection = LazyCollection::make(function () {
+            $value = 0;
+            while (true) {
+                yield $value;
+                $value++;
+            }
+        });
+
+        $result = $collection->take(10);
+        assertEqualsCanonicalizing([0,1,2,3,4,5,6,7,8,9], $result->all());
     }
 }
