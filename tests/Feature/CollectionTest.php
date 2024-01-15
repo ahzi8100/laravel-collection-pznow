@@ -216,4 +216,63 @@ class CollectionTest extends TestCase
             return $value = "Ahmad";
         }));
     }
+
+    public function testGrouping()
+    {
+        $collection = collect([
+            [
+                "name" => "Fauzi",
+                "department" => "IT"
+            ],
+            [
+                "name" => "Ahzi",
+                "department" => "IT"
+            ],
+            [
+                "name" => "Budi",
+                "department" => "HR"
+            ]
+        ]);
+
+        $result = $collection->groupBy("department");
+        assertEquals([
+            "IT" => collect([
+                [
+                    "name" => "Fauzi",
+                    "department" => "IT"
+                ],
+                [
+                    "name" => "Ahzi",
+                    "department" => "IT"
+                ],
+            ]),
+            "HR" => collect([
+                [
+                    "name" => "Budi",
+                    "department" => "HR"
+                ]
+            ])
+        ], $result->all());
+
+        self::assertEquals([
+            "IT" => collect([
+                [
+                    "name" => "Fauzi",
+                    "department" => "IT"
+                ],
+                [
+                    "name" => "Ahzi",
+                    "department" => "IT"
+                ],
+            ]),
+            "HR" => collect([
+                [
+                    "name" => "Budi",
+                    "department" => "HR"
+                ]
+            ])
+        ], $collection->groupBy(function ($value, $key){
+            return $value["department"];
+        })->all());
+    }
 }
