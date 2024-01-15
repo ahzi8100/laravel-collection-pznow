@@ -50,4 +50,44 @@ class CollectionTest extends TestCase
         $result = $collection->mapInto(Person::class);
         assertEquals([new Person("Ahzi")], $result->all());
     }
+
+    public function testMapSpread()
+    {
+        $collection = collect([["Ahmad", "Fauzi"], ["Ah", "Zi"]]);
+        $result = $collection->mapSpread(function ($firstName, $lastName){
+            $fullName = $firstName . " " . $lastName;
+            return new Person($fullName);
+        });
+        assertEquals([
+            new Person("Ahmad Fauzi"),
+            new Person("Ah Zi")
+        ], $result->all());
+    }
+
+    public function testMapToGroup()
+    {
+        $collection = collect([
+            [
+                "name" => "Fauzi",
+                "department" => "IT"
+            ],
+            [
+                "name" => "Ahzi",
+                "department" => "IT"
+            ],
+            [
+                "name" => "Budi",
+                "department" => "HR"
+            ]
+        ]);
+
+        $result = $collection->mapToGroups(function ($item){
+            return [$item["department"] => $item["name"]];
+        });
+
+        assertEquals([
+            "IT" => collect(["Fauzi", "Ahzi"]),
+            "HR" => collect(["Budi"])
+        ], $result->all());
+    }
 }
