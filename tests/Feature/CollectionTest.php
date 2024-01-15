@@ -156,4 +156,12 @@ class CollectionTest extends TestCase
 
         assertEquals(["Coding", "Gaming","Reading", "Writing"], $hobbies->all());
     }
+
+    public function testJoin()
+    {
+        $collection = collect(["Ahmad", "Fauzi", "Ahzi"]);
+
+        assertEquals("Ahmad-Fauzi-Ahzi", $collection->join("-"));
+        assertEquals("Ahmad-Fauzi_Ahzi", $collection->join("-", "_"));
+    }
 }
