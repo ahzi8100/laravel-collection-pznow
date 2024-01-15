@@ -124,4 +124,36 @@ class CollectionTest extends TestCase
             "country" => "Indonesia"
         ], $collection3->all());
     }
+
+    public function testCollapse()
+    {
+        $collection = collect([
+            [1,2,3],
+            [4,5,6],
+            [7,8,9]
+        ]);
+        $result = $collection->collapse();
+
+        assertEquals([1,2,3,4,5,6,7,8,9], $result->all());
+    }
+
+    public function testFlatMap()
+    {
+        $collection = collect([
+            [
+                "name" => "Ahzi",
+                "hobbies" => ["Coding", "Gaming"]
+            ],
+            [
+                "name" => "Fau",
+                "hobbies" => ["Reading", "Writing"]
+            ]
+        ]);
+
+        $hobbies = $collection->flatMap(function ($item){
+            return $item["hobbies"];
+        });
+
+        assertEquals(["Coding", "Gaming","Reading", "Writing"], $hobbies->all());
+    }
 }
